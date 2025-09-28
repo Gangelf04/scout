@@ -17,24 +17,28 @@ export function Header() {
         </div>
         <div className='flex flex-1 items-center justify-between space-x-2 md:justify-end'>
           <nav className='flex items-center space-x-6 text-sm font-medium'>
-            <Link
-              href='/players'
-              className='transition-colors hover:text-foreground/80 text-foreground/60'
-            >
-              Players
-            </Link>
-            <Link
-              href='/cards'
-              className='transition-colors hover:text-foreground/80 text-foreground/60'
-            >
-              Cards
-            </Link>
-            <Link
-              href='/portfolio'
-              className='transition-colors hover:text-foreground/80 text-foreground/60'
-            >
-              Portfolio
-            </Link>
+            {session && (
+              <>
+                <Link
+                  href='/dashboard'
+                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href='/watchlist'
+                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                >
+                  Watchlist
+                </Link>
+                <Link
+                  href='/profile'
+                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                >
+                  Profile
+                </Link>
+              </>
+            )}
           </nav>
           <div className='flex items-center space-x-2'>
             {status === 'loading' ? (

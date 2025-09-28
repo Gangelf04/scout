@@ -8,16 +8,68 @@ import {
   decimal,
   jsonb,
   varchar,
-  date
+  date,
+  primaryKey
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-// Users table (Google OAuth integration)
-export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  email: text('email').notNull().unique(),
+// NextAuth required tables
+export const users = pgTable('user', {
+  id: text('id').primaryKey(),
   name: text('name'),
-  image: text('image'),
+  email: text('email').notNull().unique(),
+  emailVerified: timestamp('emailVerified', { mode: 'date' }),
+  image: text('image')
+});
+
+export const accounts = pgTable(
+  'account',
+  {
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: text('type').notNull(),
+    provider: text('provider').notNull(),
+    providerAccountId: text('providerAccountId').notNull(),
+    refresh_token: text('refresh_token'),
+    access_token: text('access_token'),
+    expires_at: integer('expires_at'),
+    token_type: text('token_type'),
+    scope: text('scope'),
+    id_token: text('id_token'),
+    session_state: text('session_state')
+  },
+  account => ({
+    compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] })
+  })
+);
+
+export const sessions = pgTable('session', {
+  sessionToken: text('sessionToken').primaryKey(),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  expires: timestamp('expires', { mode: 'date' }).notNull()
+});
+
+export const verificationTokens = pgTable(
+  'verificationToken',
+  {
+    identifier: text('identifier').notNull(),
+    token: text('token').notNull(),
+    expires: timestamp('expires', { mode: 'date' }).notNull()
+  },
+  vt => ({
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
+  })
+);
+
+// App-specific users table (for additional user data)
+export const appUsers = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
 });
@@ -121,7 +173,7 @@ export const priceHistory = pgTable('price_history', {
 export const watchlist = pgTable('watchlist', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id')
-    .references(() => users.id)
+    .references(() => appUsers.id)
     .notNull(),
   playerId: uuid('player_id')
     .references(() => players.id)
@@ -368,7 +420,7 @@ export const marketTrends = pgTable('market_trends', {
 export const userPortfolios = pgTable('user_portfolios', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id')
-    .references(() => users.id)
+    .references(() => appUsers.id)
     .notNull(),
   cardId: uuid('card_id')
     .references(() => cards.id)
@@ -386,7 +438,7 @@ export const userPortfolios = pgTable('user_portfolios', {
 export const userAnalytics = pgTable('user_analytics', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id')
-    .references(() => users.id)
+    .references(() => appUsers.id)
     .notNull(),
   totalInvested: decimal('total_invested', { precision: 12, scale: 2 }).default('0').notNull(),
   totalValue: decimal('total_value', { precision: 12, scale: 2 }).default('0').notNull(),
@@ -399,6 +451,30 @@ export const userAnalytics = pgTable('user_analytics', {
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions),
+  appUser: many(appUsers)
+}));
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id]
+  })
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id]
+  })
+}));
+
+export const appUsersRelations = relations(appUsers, ({ one, many }) => ({
+  user: one(users, {
+    fields: [appUsers.userId],
+    references: [users.id]
+  }),
   watchlist: many(watchlist),
   portfolios: many(userPortfolios),
   analytics: many(userAnalytics)
@@ -441,6 +517,13 @@ export const cardsRelations = relations(cards, ({ many, one }) => ({
   }),
   priceHistory: many(priceHistory),
   portfolios: many(userPortfolios)
+}));
+
+export const priceHistoryRelations = relations(priceHistory, ({ one }) => ({
+  card: one(cards, {
+    fields: [priceHistory.cardId],
+    references: [cards.id]
+  })
 }));
 
 // Football statistics relations

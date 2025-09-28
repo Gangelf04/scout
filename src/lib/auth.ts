@@ -12,16 +12,30 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id
+    jwt: ({ token, user, account }) => {
+      console.log('JWT callback:', { token, user, account });
+      if (user) {
+        token.id = user.id;
       }
-    })
+      return token;
+    },
+    session: ({ session, token }) => {
+      console.log('Session callback:', { session, token });
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string
+        }
+      };
+    }
   },
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error'
-  }
+  },
+  session: {
+    strategy: 'jwt'
+  },
+  debug: process.env.NODE_ENV === 'development'
 };
