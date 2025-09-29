@@ -9,7 +9,7 @@ import {
   players,
   teams
 } from '@/lib/db/schema';
-import { eq, and, desc, asc, gte, lte, sql } from 'drizzle-orm';
+import { eq, and, desc, asc, gte, sql } from 'drizzle-orm';
 import type { StatsQuery, Position } from '@/types/statistics';
 
 // Get player statistics by position and season
@@ -71,7 +71,7 @@ export async function getTopPerformers(query: StatsQuery) {
     throw new Error('Position and season are required');
   }
 
-  let orderBy;
+  let orderBy: any;
   let table;
   let selectFields;
 
@@ -83,10 +83,29 @@ export async function getTopPerformers(query: StatsQuery) {
         playerId: footballStats.playerId,
         season: footballStats.season,
         teamId: footballStats.teamId,
-        position: footballStats.position,
         gamesPlayed: footballStats.gamesPlayed,
         gamesStarted: footballStats.gamesStarted,
-        ...qbStats
+        id: qbStats.id,
+        footballStatsId: qbStats.footballStatsId,
+        passAttempts: qbStats.passAttempts,
+        passCompletions: qbStats.passCompletions,
+        passYards: qbStats.passYards,
+        passTouchdowns: qbStats.passTouchdowns,
+        interceptions: qbStats.interceptions,
+        passLong: qbStats.passLong,
+        sacks: qbStats.sacks,
+        sackYards: qbStats.sackYards,
+        rushAttempts: qbStats.rushAttempts,
+        rushYards: qbStats.rushYards,
+        rushTouchdowns: qbStats.rushTouchdowns,
+        rushLong: qbStats.rushLong,
+        completionPercentage: qbStats.completionPercentage,
+        yardsPerAttempt: qbStats.yardsPerAttempt,
+        yardsPerCompletion: qbStats.yardsPerCompletion,
+        passerRating: qbStats.passerRating,
+        qbr: qbStats.qbr,
+        createdAt: qbStats.createdAt,
+        updatedAt: qbStats.updatedAt
       };
       orderBy = sortBy ? qbStats[sortBy as keyof typeof qbStats] : qbStats.passYards;
       break;
@@ -96,10 +115,26 @@ export async function getTopPerformers(query: StatsQuery) {
         playerId: footballStats.playerId,
         season: footballStats.season,
         teamId: footballStats.teamId,
-        position: footballStats.position,
         gamesPlayed: footballStats.gamesPlayed,
         gamesStarted: footballStats.gamesStarted,
-        ...rbStats
+        id: rbStats.id,
+        footballStatsId: rbStats.footballStatsId,
+        rushAttempts: rbStats.rushAttempts,
+        rushYards: rbStats.rushYards,
+        rushTouchdowns: rbStats.rushTouchdowns,
+        rushLong: rbStats.rushLong,
+        fumbles: rbStats.fumbles,
+        fumblesLost: rbStats.fumblesLost,
+        receptions: rbStats.receptions,
+        receivingYards: rbStats.receivingYards,
+        receivingTouchdowns: rbStats.receivingTouchdowns,
+        receivingLong: rbStats.receivingLong,
+        yardsPerRush: rbStats.yardsPerRush,
+        yardsPerReception: rbStats.yardsPerReception,
+        totalYards: rbStats.totalYards,
+        totalTouchdowns: rbStats.totalTouchdowns,
+        createdAt: rbStats.createdAt,
+        updatedAt: rbStats.updatedAt
       };
       orderBy = sortBy ? rbStats[sortBy as keyof typeof rbStats] : rbStats.rushYards;
       break;
@@ -110,10 +145,29 @@ export async function getTopPerformers(query: StatsQuery) {
         playerId: footballStats.playerId,
         season: footballStats.season,
         teamId: footballStats.teamId,
-        position: footballStats.position,
         gamesPlayed: footballStats.gamesPlayed,
         gamesStarted: footballStats.gamesStarted,
-        ...receiverStats
+        id: receiverStats.id,
+        footballStatsId: receiverStats.footballStatsId,
+        position: receiverStats.position,
+        receptions: receiverStats.receptions,
+        receivingYards: receiverStats.receivingYards,
+        receivingTouchdowns: receiverStats.receivingTouchdowns,
+        receivingLong: receiverStats.receivingLong,
+        targets: receiverStats.targets,
+        drops: receiverStats.drops,
+        fumbles: receiverStats.fumbles,
+        fumblesLost: receiverStats.fumblesLost,
+        rushAttempts: receiverStats.rushAttempts,
+        rushYards: receiverStats.rushYards,
+        rushTouchdowns: receiverStats.rushTouchdowns,
+        yardsPerReception: receiverStats.yardsPerReception,
+        catchPercentage: receiverStats.catchPercentage,
+        yardsPerTarget: receiverStats.yardsPerTarget,
+        totalYards: receiverStats.totalYards,
+        totalTouchdowns: receiverStats.totalTouchdowns,
+        createdAt: receiverStats.createdAt,
+        updatedAt: receiverStats.updatedAt
       };
       orderBy = sortBy
         ? receiverStats[sortBy as keyof typeof receiverStats]
@@ -125,10 +179,29 @@ export async function getTopPerformers(query: StatsQuery) {
         playerId: footballStats.playerId,
         season: footballStats.season,
         teamId: footballStats.teamId,
-        position: footballStats.position,
         gamesPlayed: footballStats.gamesPlayed,
         gamesStarted: footballStats.gamesStarted,
-        ...defensiveStats
+        id: defensiveStats.id,
+        footballStatsId: defensiveStats.footballStatsId,
+        position: defensiveStats.position,
+        totalTackles: defensiveStats.totalTackles,
+        soloTackles: defensiveStats.soloTackles,
+        assistedTackles: defensiveStats.assistedTackles,
+        tacklesForLoss: defensiveStats.tacklesForLoss,
+        sacks: defensiveStats.sacks,
+        quarterbackHits: defensiveStats.quarterbackHits,
+        interceptions: defensiveStats.interceptions,
+        interceptionYards: defensiveStats.interceptionYards,
+        interceptionTouchdowns: defensiveStats.interceptionTouchdowns,
+        passesDefended: defensiveStats.passesDefended,
+        fumbleRecoveries: defensiveStats.fumbleRecoveries,
+        fumbleRecoveryYards: defensiveStats.fumbleRecoveryYards,
+        fumbleRecoveryTouchdowns: defensiveStats.fumbleRecoveryTouchdowns,
+        forcedFumbles: defensiveStats.forcedFumbles,
+        tacklesPerGame: defensiveStats.tacklesPerGame,
+        sacksPerGame: defensiveStats.sacksPerGame,
+        createdAt: defensiveStats.createdAt,
+        updatedAt: defensiveStats.updatedAt
       };
       orderBy = sortBy
         ? defensiveStats[sortBy as keyof typeof defensiveStats]
@@ -143,10 +216,10 @@ export async function getTopPerformers(query: StatsQuery) {
       and(
         eq(footballStats.season, season),
         eq(footballStats.position, position),
-        query.minGames ? gte(footballStats.gamesPlayed, query.minGames) : undefined
+        ...(query.minGames ? [gte(footballStats.gamesPlayed, query.minGames)] : [])
       )
     )
-    .orderBy(sortOrder === 'desc' ? desc(orderBy) : asc(orderBy))
+    .orderBy(sortOrder === 'desc' ? desc(orderBy!) : asc(orderBy!))
     .limit(limit)
     .offset(offset);
 
@@ -217,7 +290,7 @@ export async function comparePlayers(playerIds: string[], season: string) {
 }
 
 // Get trending players (improving performance)
-export async function getTrendingPlayers(position: Position, season: string, weeks: number = 4) {
+export async function getTrendingPlayers(position: Position, season: string) {
   // This would require more complex logic to compare recent performance vs earlier in season
   // For now, return top performers
   return await getTopPerformers({
