@@ -21,19 +21,19 @@ export function Header() {
               <>
                 <Link
                   href='/dashboard'
-                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
                 >
                   Dashboard
                 </Link>
                 <Link
                   href='/watchlist'
-                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
                 >
                   Watchlist
                 </Link>
                 <Link
                   href='/profile'
-                  className='transition-colors hover:text-foreground/80 text-foreground/60'
+                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
                 >
                   Profile
                 </Link>

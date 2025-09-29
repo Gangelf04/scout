@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { AuthSessionProvider } from '@/components/providers/session-provider';
 import { Header } from '@/components/layout/header';
+import { ErrorBoundary } from '@/components/ui/error-boundary';
 import './globals.css';
 
 const geistSans = Geist({
@@ -30,7 +31,9 @@ export default function RootLayout({
         <AuthSessionProvider>
           <div className='min-h-screen bg-background'>
             <Header />
-            <main className='container mx-auto py-6'>{children}</main>
+            <main className='container mx-auto py-6'>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </main>
           </div>
         </AuthSessionProvider>
       </body>

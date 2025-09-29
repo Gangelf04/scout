@@ -16,7 +16,7 @@ export default async function WatchlistPage() {
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Watchlist</h1>
-          <p className='text-muted-foreground'>Track players you're interested in</p>
+          <p className='text-muted-foreground'>Track players you&apos;re interested in</p>
         </div>
         <Button>Add Player</Button>
       </div>
@@ -25,7 +25,7 @@ export default async function WatchlistPage() {
         <CardHeader>
           <CardTitle>Your Tracked Players</CardTitle>
           <CardDescription>
-            Players you're currently monitoring for card investment opportunities
+            Players you&apos;re currently monitoring for card investment opportunities
           </CardDescription>
         </CardHeader>
         <CardContent>

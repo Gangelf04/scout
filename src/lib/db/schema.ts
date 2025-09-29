@@ -7,7 +7,6 @@ import {
   boolean,
   decimal,
   jsonb,
-  varchar,
   date,
   primaryKey
 } from 'drizzle-orm/pg-core';

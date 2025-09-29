@@ -18,7 +18,7 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Watchlist</CardTitle>
-            <CardDescription>Players you're tracking</CardDescription>
+            <CardDescription>Players you&apos;re tracking</CardDescription>
           </CardHeader>
           <CardContent>
             <p className='text-2xl font-bold'>0</p>
