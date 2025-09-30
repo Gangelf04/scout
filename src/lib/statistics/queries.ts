@@ -71,7 +71,7 @@ export async function getTopPerformers(query: StatsQuery) {
     throw new Error('Position and season are required');
   }
 
-  let orderBy: any;
+  let orderBy: unknown;
   let table;
   let selectFields;
 
@@ -296,7 +296,7 @@ export async function getTrendingPlayers(position: Position, season: string) {
   return await getTopPerformers({
     position,
     season,
-    sortBy: 'totalYards' as any,
+    sortBy: 'totalYards' as const,
     limit: 20
   });
 }

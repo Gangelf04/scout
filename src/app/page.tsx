@@ -20,14 +20,15 @@ export default async function Home() {
         </h1>
         <p className='text-xl text-muted-foreground max-w-2xl mx-auto'>
           Scout High School and NCAA players before everyone else. Use AI-powered analysis to
-          discover undervalued sports cards and maximize your profits.
+          discover undervalued sports cards and maximize your profits with advanced machine
+          learning.
         </p>
         <div className='flex gap-4 justify-center'>
           <Button asChild size='lg'>
-            <Link href='/players'>Start Scouting</Link>
+            <Link href='/ai'>AI Scout Center</Link>
           </Button>
           <Button variant='outline' size='lg' asChild>
-            <Link href='/portfolio'>View Portfolio</Link>
+            <Link href='/dashboard'>Dashboard</Link>
           </Button>
         </div>
       </section>

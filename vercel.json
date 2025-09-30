@@ -1,14 +1,13 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "bun run build",
-  "devCommand": "bun run dev",
-  "installCommand": "bun install",
   "functions": {
-    "src/app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
+    "src/app/api/ai/**/*.ts": {
+      "maxDuration": 60
     }
   },
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "crons": [
+    {
+      "path": "/api/ai/refresh-cache",
+      "schedule": "0 */6 * * *"
+    }
+  ]
 }

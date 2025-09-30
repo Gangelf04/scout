@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { Brain, BarChart3, User, Eye } from 'lucide-react';
 
 export function Header() {
   const { data: session, status } = useSession();
@@ -21,20 +22,30 @@ export function Header() {
               <>
                 <Link
                   href='/dashboard'
-                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
+                  className='transition-colors hover:text-primary text-foreground hover:bg-secondary/50 px-3 py-2 rounded-md flex items-center gap-2'
                 >
+                  <BarChart3 className='h-4 w-4' />
                   Dashboard
                 </Link>
                 <Link
-                  href='/watchlist'
-                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
+                  href='/ai'
+                  className='transition-colors hover:text-primary text-foreground hover:bg-secondary/50 px-3 py-2 rounded-md flex items-center gap-2'
                 >
+                  <Brain className='h-4 w-4' />
+                  AI Scout
+                </Link>
+                <Link
+                  href='/watchlist'
+                  className='transition-colors hover:text-primary text-foreground hover:bg-secondary/50 px-3 py-2 rounded-md flex items-center gap-2'
+                >
+                  <Eye className='h-4 w-4' />
                   Watchlist
                 </Link>
                 <Link
                   href='/profile'
-                  className='transition-colors hover:text-primary text-muted-foreground hover:bg-secondary/50 px-3 py-2 rounded-md'
+                  className='transition-colors hover:text-primary text-foreground hover:bg-secondary/50 px-3 py-2 rounded-md flex items-center gap-2'
                 >
+                  <User className='h-4 w-4' />
                   Profile
                 </Link>
               </>
@@ -45,7 +56,7 @@ export function Header() {
               <div className='h-8 w-20 animate-pulse rounded bg-muted' />
             ) : session ? (
               <div className='flex items-center space-x-2'>
-                <span className='text-sm text-muted-foreground'>{session.user?.name}</span>
+                <span className='text-sm text-foreground'>{session.user?.name}</span>
                 <Button variant='outline' size='sm' onClick={() => signOut()}>
                   Sign Out
                 </Button>
